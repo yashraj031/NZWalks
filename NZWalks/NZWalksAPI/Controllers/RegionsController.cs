@@ -152,7 +152,7 @@ namespace NZWalksAPI.Controllers
                 Long = region.Long,
                 Population = region.Population
             };
-            return Ok(regionDTO);
+            return Ok(regionDTO); 
         }
 
     }
