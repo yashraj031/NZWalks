@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZWalksAPI.Model.DTO;
 using NZWalksAPI.Repository;
@@ -7,15 +8,21 @@ namespace NZWalksAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class WalksController : Controller
     {
         private readonly IWalkRepository walkRepository;
         private readonly IMapper mapper;
+        private readonly IRegionRepository regionRepository;
+        private readonly IWalkDifficultyRepository walkDifficultyRepository;
 
-        public WalksController(IWalkRepository walkRepository, IMapper mapper)
+        public WalksController(IWalkRepository walkRepository, IMapper mapper,
+            IRegionRepository regionRepository, IWalkDifficultyRepository walkDifficultyRepository)
         {
             this.walkRepository = walkRepository;
             this.mapper = mapper;
+            this.regionRepository = regionRepository;
+            this.walkDifficultyRepository = walkDifficultyRepository;
         }
         [HttpGet]    
         public async Task<IActionResult> GetAllAsync()
@@ -180,11 +187,11 @@ namespace NZWalksAPI.Controllers
                 ModelState.AddModelError(nameof(addWalkRequest.RegionId),
                     $"{nameof(addWalkRequest.RegionId)} is invalid.");
             }
-            var walkDifficulty = await walkDifficultyRepository.GetAsync(addWalkRequest.WalkDifficultyId);
+            var walkDifficulty = await walkDifficultyRepository.GetAsync(addWalkRequest.WalkDifficultyID);
             if (walkDifficulty == null)
             {
-                ModelState.AddModelError(nameof(addWalkRequest.WalkDifficultyId),
-                       $"{nameof(addWalkRequest.WalkDifficultyId)} is invalid.");
+                ModelState.AddModelError(nameof(addWalkRequest.WalkDifficultyID),
+                       $"{nameof(addWalkRequest.WalkDifficultyID)} is invalid.");
             }
             if (ModelState.ErrorCount > 0)
             {
@@ -238,11 +245,11 @@ namespace NZWalksAPI.Controllers
                 ModelState.AddModelError(nameof(updateWalkRequest.RegionId),
                     $"{nameof(updateWalkRequest.RegionId)} is invalid.");
             }
-            var walkDifficulty = await walkDifficultyRepository.GetAsync(updateWalkRequest.WalkDifficultyId);
+            var walkDifficulty = await walkDifficultyRepository.GetAsync(updateWalkRequest.WalkDifficultyID);
             if (walkDifficulty == null)
             {
-                ModelState.AddModelError(nameof(updateWalkRequest.WalkDifficultyId),
-                       $"{nameof(updateWalkRequest.WalkDifficultyId)} is invalid.");
+                ModelState.AddModelError(nameof(updateWalkRequest.WalkDifficultyID),
+                       $"{nameof(updateWalkRequest.WalkDifficultyID)} is invalid.");
             }
             if (ModelState.ErrorCount > 0)
             {
@@ -251,5 +258,6 @@ namespace NZWalksAPI.Controllers
             return true;
         }
         #endregion
+
     }
 }
