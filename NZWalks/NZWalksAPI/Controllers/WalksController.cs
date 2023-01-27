@@ -31,7 +31,7 @@ namespace NZWalksAPI.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetWalkAsunc(Guid id)
+        public async Task<IActionResult> GetWalkAsync(Guid id)
         { 
             // Get walk Domain Object from Database
             var walkDomain = await walkRepository.GetAsync(id);
@@ -67,7 +67,7 @@ namespace NZWalksAPI.Controllers
                 RegionId = walkDomain.RegionId,
                 WalkDifficultyID = walkDomain.WalkDifficultyID
             };
-            return CreatedAtAction(nameof(GetAllAsync), new { id = walkDTO.Id }, walkDTO);
+            return CreatedAtAction(nameof(GetWalkAsync), new { id = walkDTO.Id }, walkDTO);
         }
 
         [HttpDelete]
