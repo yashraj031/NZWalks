@@ -24,7 +24,8 @@ namespace NZWalksAPI.Controllers
             this.regionRepository = regionRepository;
             this.walkDifficultyRepository = walkDifficultyRepository;
         }
-        [HttpGet]    
+        [HttpGet]
+        [Authorize(Roles ="reader")]
         public async Task<IActionResult> GetAllAsync()
         {
             //Fetch Data From Domain
@@ -38,6 +39,8 @@ namespace NZWalksAPI.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
+        [Authorize(Roles = "reader")]
+
         public async Task<IActionResult> GetWalkAsync(Guid id)
         { 
             // Get walk Domain Object from Database
@@ -51,7 +54,9 @@ namespace NZWalksAPI.Controllers
         }
 
         [HttpPost]
-        
+        [Authorize(Roles = "writer")]
+
+
         public async Task<IActionResult> AddWalkAsync([FromBody] Model.DTO.AddWalkRequest addWalkRequest)
         {
 
@@ -86,6 +91,8 @@ namespace NZWalksAPI.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
+
         public async Task<IActionResult> DeleteWalkAsync(Guid id)
         {
             // Get Region from Database
@@ -102,6 +109,8 @@ namespace NZWalksAPI.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
+
         public async Task<IActionResult> UpdareWalkAsync([FromRoute] Guid id, [FromBody] Model.DTO.UpdateWalkRequest updateWalkRequest)
             {
 
